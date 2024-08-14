@@ -11,7 +11,7 @@ public class HelloWorld { // Aqui é criada a class HelloWorld
 
 
     /**
-     * static: delcaração de método somente leitura, o qual não poderá ser editado, exceto pelo uso de @Override
+     * static: declaração de método somente leitura, o qual não poderá ser editado, exceto pelo uso de @Override
      * void: modo protegido de um método, o qual não retornará qualquer valor
      * main: nome do método "executor"
      * ( (abre parêntese): serve para declarar o ínicio das declarações de parâmetros de um método/função
