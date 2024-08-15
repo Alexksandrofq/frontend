@@ -43,9 +43,9 @@ public class Addition //Aqui está sendo declarado uma class chamada Addition
        * ";": fim de linha
        */
       String firstNumber = // Aqui é uma declaração de uma variável
-         JOptionPane.showInputDialog("Enter first integer");
+         JOptionPane.showInputDialog("Digite o primeiro número");
       String secondNumber = // Aqui é a declaração de uma variávels
-         JOptionPane.showInputDialog("Enter second integer");
+         JOptionPane.showInputDialog("Digite o segundo número");
 
       /**
        * int: declaração do tipo da variável
@@ -72,8 +72,8 @@ public class Addition //Aqui está sendo declarado uma class chamada Addition
        * sum: para conventer o que venho antes em string
        * ",": operador de separação
        */
-      JOptionPane.showMessageDialog(null, "The sum is " + sum, 
-         "Sum of Two Integers", JOptionPane.PLAIN_MESSAGE);
+      JOptionPane.showMessageDialog(null, "A soma dos números é: " + sum, 
+         "Soma de dois inteiros", JOptionPane.PLAIN_MESSAGE);
 
    } // Aqui fecha bloco de código do método executor
 
