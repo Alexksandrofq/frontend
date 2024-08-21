@@ -62,7 +62,7 @@ public class TextFieldFrame extends JFrame
          String string = ""; 
          // user pressed Enter in JTextField textField1 (usuário pressionou Enter em JTextField textField1)
          if (event.getSource() == textField1)//
-            string = String.format("textField1: %s",//Aqui decla o formato, %s é formato de String
+            string = String.format("textField1: %s",//Aqui declara o formato, %s é formato de String
                event.getActionCommand());//O texto digitado
         
          else if (event.getSource() == textField2)
