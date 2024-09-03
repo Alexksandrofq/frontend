@@ -44,24 +44,24 @@ public class MouseTrackerFrame extends JFrame // Aqui está definido a classe Mo
       @Override
       public void mousePressed(MouseEvent event)
       {
-         statusBar.setText(String.format("Pressed at [%d, %d]", 
-            event.getX(), event.getY())); // Aqui está definindo a pressão, a prmeira %d double e getX, o segundo %d eé o getY
+         statusBar.setText(String.format("Pressed at [left: %d, top: %d, right: %d, bottom: %d]", 
+         event.getX(), event.getY(), mousePanel.getWidth() - event.getX(), mousePanel.getHeight() - event.getY())); // Aqui está definindo a pressão, a prmeira %d double e getX, o segundo %d eé o getY
       }
 
       // handle event when mouse released (manipular evento quando o mouse é liberado)
       @Override
       public void mouseReleased(MouseEvent event)
       {
-         statusBar.setText(String.format("Released at [%d, %d]", 
-            event.getX(), event.getY())); // Aqui está definindo a pressão, a prmeira %d double e getX, o segundo %d eé o getY
+         statusBar.setText(String.format("Released at [left: %d, top: %d, right: %d, bottom: %d]", 
+         event.getX(), event.getY(), mousePanel.getWidth() - event.getX(), mousePanel.getHeight() - event.getY())); // Aqui está definindo a pressão, a prmeira %d double e getX, o segundo %d eé o getY
       }
 
       // handle event when mouse enters area (manipular evento quando o mouse entra na área) // Quando o mouse entra no painel muda a cor do fundo
       @Override
       public void mouseEntered(MouseEvent event)
       {
-         statusBar.setText(String.format("Mouse entered at [%d, %d]", 
-            event.getX(), event.getY())); // Aqui está definindo a pressão do mouse, a prmeira %d double e getX, o segundo %d eé o getY
+         statusBar.setText(String.format("Mouse entered at [left: %d, top: %d, right: %d, bottom: %d]", 
+         event.getX(), event.getY(), mousePanel.getWidth() - event.getX(), mousePanel.getHeight() - event.getY())); // Aqui está definindo a pressão do mouse, a prmeira %d double e getX, o segundo %d eé o getY
          mousePanel.setBackground(Color.GREEN);
       }
 
@@ -78,16 +78,16 @@ public class MouseTrackerFrame extends JFrame // Aqui está definido a classe Mo
       @Override
       public void mouseDragged(MouseEvent event)
       {
-         statusBar.setText(String.format("Dragged at [%d, %d]", 
-            event.getX(), event.getY()));  // Aqui está definindo a pressão, a prmeira %d double e getX, o segundo %d eé o getY
+         statusBar.setText(String.format("Dragged at [left: %d, top: %d, right: %d, bottom: %d]", 
+            event.getX(), event.getY(), mousePanel.getWidth() - event.getX(), mousePanel.getHeight() - event.getY()));  // Aqui está definindo a pressão, a prmeira %d double e getX, o segundo %d eé o getY
       } 
 
       // handle event when user moves mouse (manipular evento quando o usuário move o mouse)
       @Override
       public void mouseMoved(MouseEvent event)
       {
-         statusBar.setText(String.format("Moved at [%d, %d]", 
-            event.getX(), event.getY()));  // Aqui está definindo a pressão, a prmeira %d double e getX, o segundo %d eé o getY
+         statusBar.setText(String.format("Moved at [left: %d, top: %d, right: %d, bottom: %d]", 
+         event.getX(), event.getY(), mousePanel.getWidth() - event.getX(), mousePanel.getHeight() - event.getY())); // Aqui está definindo a pressão, a prmeira %d double e getX, o segundo %d eé o getY
       } 
       
 
