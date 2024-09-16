@@ -187,7 +187,7 @@ public class MenuFrame extends JFrame
             if (event.getSource() == fonts[count]) 
             {
                displayJLabel.setFont(
-                  new Font(fonts[count].getText(), style, 72));
+                  new Font(fonts[count].getText(), style, tamanhoAtual));
             }
          } // Aqui fecha o laço de fonte
 
