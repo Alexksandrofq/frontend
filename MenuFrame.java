@@ -17,6 +17,7 @@ public class MenuFrame extends JFrame
    private final ButtonGroup colorButtonGroup; // manages color menu items (gerencia itens de menu de cores)
    private final ButtonGroup tamanhoButtonGroup;
    private int style; // used to create style for font (usado para criar estilo para fonte)
+   private int tamanhoAtual;
 
    // no-argument constructor set up GUI (GUI de configuração de construtor sem argumentos)
    public MenuFrame() // Aqui está definindo o construtor
@@ -196,6 +197,7 @@ public class MenuFrame extends JFrame
             {
                int size = Integer.parseInt(tamanhos[count].getText());
                displayJLabel.setFont(displayJLabel.getFont().deriveFont((float) size));
+               tamanhoAtual = size;
             }
          }
 
@@ -218,13 +220,13 @@ public class MenuFrame extends JFrame
          // determine which CheckBoxes are checked and create Font (determinar quais CheckBoxes estão marcadas e criar Font) // Aqui está definindo o validador 
          if (styleItems[0].isSelected() && 
               styleItems[1].isSelected())
-            font = new Font(name, Font.BOLD + Font.ITALIC, 72);
+            font = new Font(name, Font.BOLD + Font.ITALIC, tamanhoAtual);
          else if (styleItems[0].isSelected())
-            font = new Font(name, Font.BOLD, 72);
+            font = new Font(name, Font.BOLD, tamanhoAtual);
          else if (styleItems[1].isSelected())
-            font = new Font(name, Font.ITALIC, 72);
+            font = new Font(name, Font.ITALIC, tamanhoAtual);
          else
-            font = new Font(name, Font.PLAIN, 72);
+            font = new Font(name, Font.PLAIN, tamanhoAtual);
 
          displayJLabel.setFont(font);
          repaint(); // redraw application (redesenhar aplicativo)
