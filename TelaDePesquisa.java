@@ -97,38 +97,33 @@ public class TelaDePesquisa extends JFrame
         lblNotificacoes = new JLabel("Notificações", SwingConstants.CENTER);
         linha_notificacoes.add(lblNotificacoes);
 
+        add(linha_notificacoes);
+
         btnPesquisar.addActionListener(
             new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent event) {
                     if (txtPesquisa.getText().trim() <= 0) {
-                        lblNotificacoes
+                        lblNotificacoes.setText(setHtmlFormat("Por favor, digite algo e tente novamente."));
+                        txtPesquisa.requestFocus();
+                        return;
                     }
-
-
-
-
-
-
-
-
-
                     try {
                         Connection conexao = MySQLConnector.conectar();
-                        String strSqlPesquisa = "select * from `db_senac`.`tbl.senac` where `nome` like `&`" + txtPesquisa.getText() + "'& or `email` like '&" + txtPesquisa.getText() + "'&";
+                        String strSqlPesquisa = "select * from `db_senac`.`tbl.senac` where `nome` like `%" + txtPesquisa.getText() + "%' or `email` like '%" + txtPesquisa.getText() + "%';";
                         Statement stmSqlPesquisa = conexao.createStatement();
                         ResultSet rtsSqlPesquisa = stmSqlPesquisa.executeQuery(strSqlPesquisa);
                         if (rtsSqlPesquisa.next()) {
-                            lblNotificacoes.setText(setHtmlFormat("Ops! Usúario não encontrado"));
+                            lblNotificacoes.setText(setHtmlFormat("Legal! Foi(Foram0 encontrado(s) resultado(s)."));
                         } else {
-                            lblNotificacoes.setText(setHtmlFormat("Pesquisa realizada com sucesso!"));
-                            String strSqlPesquisar = "insert into `db_senac`.`tbl_senac` (`nome`, email) values ('" + txtNome.getText() + "','" + txtEmail.getText() + "');";
-                            Statement stmSqlPesquisar = conexao.createStatement();
-                            stmSqlPesquisa.addBatch(strSqlPesquisar);
-                            stmSqlPesquisar.execute
-                        }
+                            lblNotificacoes.setText(setHtmlFormat("Poxa vida! Não foram encontrados resultados para: \ "" + txtPesquisa.getText() + "\"."));
                     }
+                    stmSqlPesquisa.close();
 
+                    } catch (Exception e) {
+                        lblNotificacoes.setText(setHtmlFormat("Não foi possível prosseguir com a pesquisa! Por favor, verifique e tente novamente."));
+                        System.err.println("Erro:" + e);
+                    }
                 }
                 
             }
@@ -137,17 +132,18 @@ public class TelaDePesquisa extends JFrame
 
 
 
+
         setSize(250, 600);
-        setVisible(true);    
+        setVisible(true);  
+        txtPesquisa.requestFocus();
         
-    {
-        private String setHtmlFormat(String strTexto) {
-            return "<html><body>" + strTexto + "</body></html>";
-        }
     }
-
-
+        
+    
+    private String setHtmlFormat(String strTexto) {
+        return "<html><body>" + strTexto + "</body></html>";
     }
+    
     public static void main(String[] args) {
         TelaDePesquisa appTelaDePesquisa = new TelaDePesquisa();
         appTelaDePesquisa.setDefaultCloseOperation(EXIT_ON_CLOSE);
