@@ -1,0 +1,49 @@
+import java.sql.*;
+
+public class NavegadorDeRegistro extends TelaDePesquisa {
+    // Aqui define o método como estático para não ter vazamento de memória
+    public static void pesquisar() {
+    try {// Aqui apos pesquisar irá desabilitar os botões
+        txtId.setText("");
+        txtNome.setText("");
+        txtEmail.setText("");
+        btnPrimeiro.setEnabled(false);
+        btnAnterior.setEnabled(false);
+        btnProximo.setEnabled(false);
+        btnUltimo.setEnabled(false);
+        btnPesquisar.setEnabled(false);
+        if (txtPesquisa.getText().trim().equals(txtUsuario) == false) {
+            Connection conexao = MySQLConnector.conectar();
+            String strSqlPesquisa = "select * from `db_senac`.`tbl_senac` where `nome` like '%" + txtPesquisa.getText() + "%' or `email` like '%" + txtPesquisa.getText() + "%';";
+            Statement stmSqlPesquisa = conexao.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);//TYPE_SCROLL_INSENSITIVE= para rolar pro lado ; CONCUR_READ_ONLY= que não pode ser habilitado
+            ResultSet rstSqlPesquisa = stmSqlPesquisa.executeQuery(strSqlPesquisa);
+          
+            if (rstSqlPesquisa.next()) {// Aqui a função vai começa se achar algo e vai ir pra frente
+                rstSqlPesquisa.last();// Vai para o ùltimo
+                int rowNumbers = rstSqlPesquisa.getRow(); //Pega a quantidade de linhas
+                rstSqlPesquisa.first();// Volta para primeiro
+
+                lblNotificacoes.setText(setHtmlFormat("Legal! Foi(Foram) encontrado(s)" + rowNumbers + "resultados."));
+                txtId.setText(rstSqlPesquisa.getString("id"));
+                txtNome.setText(rstSqlPesquisa.getString("nome"));
+                txtEmail.setText(rstSqlPesquisa.getString("email"));
+                txtUsuario = txtPesquisa.getText();// Aqui irá pegar o que for digitado na pequisa e colocado na váriavel usuario
+                btnPesquisar.setEnabled(false);// Aqui irá deixa bloqueado o botão pesquisar até termina a pesquisa
+                if (rowNumbers > 1) {// Se q uantiodade de linhas forem maior qu e 1, irá habilitar os botôes
+                btnProximo.setEnabled(true);
+                btnUltimo.setEnabled(true);
+                }
+            } else {
+                lblNotificacoes.setText(setHtmlFormat("Poxa vida! Não foram encontrados resultados para: \"" + txtPesquisa.getText() + "\"."));
+            }
+            stmSqlPesquisa.close();
+        }
+    } catch (Exception e) {
+        lblNotificacoes.setText(setHtmlFormat("Não foi possível prosseguir com a pesquisa! Por favor, verifique e tente novamente."));
+        System.err.println("Erro: " + e);
+        }
+    }
+
+}
+
+
