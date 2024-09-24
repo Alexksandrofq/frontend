@@ -7,8 +7,9 @@ public class NavegadorDeRegistro extends TelaDePesquisa {
     // Statement = declaração 
     try {
         if (txtPesquisa.getText().trim().equals(txtUsuario) == false) {
+            limparCampos("");
             Connection conexao = MySQLConnector.conectar();
-            String strSqlPesquisa = "select * from `db_senac`.`tbl_senac` where `nome` like '%" + txtPesquisa.getText() + "%' or `email` like '%" + txtPesquisa.getText() + "%';";
+            String strSqlPesquisa = "select * from `db_senac`.`tbl_senac` where `nome` like '%" + txtPesquisa.getText() + "%' or `email` like '%" + txtPesquisa.getText() + "%' order by `id` asc;";
             Statement stmSqlPesquisa = conexao.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);//TYPE_SCROLL_INSENSITIVE= para rolar pro lado ; CONCUR_READ_ONLY= que não pode ser habilitado
             ResultSet rstSqlPesquisa = stmSqlPesquisa.executeQuery(strSqlPesquisa);
           
@@ -26,6 +27,7 @@ public class NavegadorDeRegistro extends TelaDePesquisa {
                 if (rowNumbers > 1) {// Se a quantiodade de linhas forem maior que 1, irá habilitar os botôes
                 btnProximo.setEnabled(true);
                 btnUltimo.setEnabled(true);
+                btnHistorico.setEnabled(true);
                 }
             } else {
                 txtUsuario = txtPesquisa.getText();
@@ -40,28 +42,132 @@ public class NavegadorDeRegistro extends TelaDePesquisa {
         }
     }
     public static void primeiroRegistro() {
-        pesqusar();
+        try {
+            limparCampos("Você está no primeiro registro.");
+            Connection conexao = MySQLConnector.conectar();
+            String strSqlPesquisa = "select * from `db_senac`.`tbl_senac` where `nome` like '%" + txtPesquisa.getText() + "%' or `email` like '%" + txtPesquisa.getText() + "%' order by `id` asc;";
+            Statement stmSqlPesquisa = conexao.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            ResultSet rstSqlPesquisa = stmSqlPesquisa.executeQuery(strSqlPesquisa);
+            if (rstSqlPesquisa.next()) {
+                txtId.setText(rstSqlPesquisa.getString("id"));
+                txtNome.setText(rstSqlPesquisa.getString("nome"));
+                txtEmail.setText(rstSqlPesquisa.getString("email"));
+                btnPesquisar.setEnabled(false);
+                btnProximo.setEnabled(true);
+                btnUltimo.setEnabled(true);
+            } else {
+                txtUsuario = txtPesquisa.getText();
+                btnPesquisar.setEnabled(false);
+                lblNotificacoes.setText(setHtmlFormat("Poxa vida! Não foram encontrados resultados para: \"" + txtPesquisa.getText() + "\"."));
+            }
+            stmSqlPesquisa.close();
+        } catch (Exception e) {
+            lblNotificacoes.setText(setHtmlFormat("Não foi possível prosseguir com a pesquisa! Por favor, verifique e tente novamente."));
+            System.err.println("Erro: " + e);
+        }
 
     }
     public static void registroAnterior() {
+        try {
+            String idAtual = txtId.getText();
+            String nomeAtual = txtNome.getText();
+            String emailAtual = txtEmail.getText();
+            limparCampos("Registro anterior posicionado com sucesso.");
+            Connection conexao = MySQLConnector.conectar();
+            String strSqlProximoRegistro = "select * from `db_senac`.`tbl_senac` where (`nome` like '%" + txtPesquisa.getText() + "%' or `email` like '%" + txtPesquisa.getText() + "%') and `id` < " + idAtual + " order by `id` desc;";
+            Statement stmSqlProximoRegistro = conexao.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            ResultSet rstSqlProximoRegistro = stmSqlProximoRegistro.executeQuery(strSqlProximoRegistro);
+            if (rstSqlProximoRegistro.next()) {
+                txtId.setText(rstSqlProximoRegistro.getString("id"));
+                txtNome.setText(rstSqlProximoRegistro.getString("nome"));
+                txtEmail.setText(rstSqlProximoRegistro.getString("email"));
+                btnPrimeiro.setEnabled(true);
+                btnAnterior.setEnabled(true);
+                btnProximo.setEnabled(true);
+                btnUltimo.setEnabled(true);
+            } else {
+                txtId.setText(idAtual);
+                txtNome.setText(nomeAtual);
+                txtEmail.setText(emailAtual);
+                btnProximo.setEnabled(true);
+                btnUltimo.setEnabled(true);
+                lblNotificacoes.setText("Você chegou ao primeiro registro.");
+            }
+            stmSqlProximoRegistro.close();
+        } catch (Exception e) {
+            lblNotificacoes.setText(setHtmlFormat("Não foi possível encontrar o próximo registro! Por favor, verifique e tente novamente."));
+            System.err.println("Erro: " + e);
+        } 
         
     }
     public static void proximoRegistro() {
         try {
-            String iaAtual = txtId.getText();
-            limparCampos();
+            String idAtual = txtId.getText();
+            String nomeAtual = txtNome.getText();
+            String emailAtual = txtEmail.getText();
+            limparCampos("Próximo registro posicionado com sucesso.");
             Connection conexao = MySQLConnector.conectar();
-            String strSqlProximo = "select * from `db_senac`.`tbl_senac` where (`nome` like '%" + txtProximo.getText() + "%' or `email` like '%" + txtProximo.getText() + "%') and `id` > " + idAtual + " order by `id` asc';";
-            Statement stmSqlProximo = conexao.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);//TYPE_SCROLL_INSENSITIVE= para rolar pro lado ; CONCUR_READ_ONLY= que não pode ser habilitado
-            ResultSet rstSqlProximo = stmSqlProximo.executeQueryo);
+            String strSqlProximoRegistro = "select * from `db_senac`.`tbl_senac` where (`nome` like '%" + txtPesquisa.getText() + "%' or `email` like '%" + txtPesquisa.getText() + "%') and `id` > " + idAtual + " order by `id` asc;";
+            Statement stmSqlProximoRegistro = conexao.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);//TYPE_SCROLL_INSENSITIVE= para rolar pro lado ; CONCUR_READ_ONLY= que não pode ser habilitado
+            ResultSet rstSqlProximoRegistro = stmSqlProximoRegistro.executeQuery(strSqlProximoRegistro);
           
-            if (rstSqlPesquisa.next())
+            if (rstSqlProximoRegistro.next()) {
+                txtId.setText(rstSqlProximoRegistro.getString("id"));
+                txtNome.setText(rstSqlProximoRegistro.getString("nome"));
+                txtEmail.setText(rstSqlProximoRegistro.getString("email"));
+                btnPrimeiro.setEnabled(true);
+                btnAnterior.setEnabled(true);
+                btnProximo.setEnabled(true);
+                btnUltimo.setEnabled(true);
+
+            } else {
+                txtId.setText(idAtual);
+                txtNome.setText(nomeAtual);
+                txtEmail.setText(emailAtual);
+                btnPrimeiro.setEnabled(true);
+                btnAnterior.setEnabled(true);
+                lblNotificacoes.setText("Você chegou ao último registro.");
+            }
+            stmSqlProximoRegistro.close();
         } catch (Exception e) {
-            // TODO: handle exception
+            lblNotificacoes.setText(setHtmlFormat("Não foi possível encontrar o próximo registro! Por favor, verifique e tente novamente."));
+            System.err.println("Erro: " + e);
+            
         }
         
     }
     public static void ultimoRegistro() {
+        try {
+            String idAtual = txtId.getText();
+            String nomeAtual = txtNome.getText();
+            String emailAtual = txtEmail.getText();
+            limparCampos("");
+            Connection conexao = MySQLConnector.conectar();
+            String strSqlProximoRegistro = "select * from `db_senac`.`tbl_senac` where (`nome` like '%" + txtPesquisa.getText() + "%' or `email` like '%" + txtPesquisa.getText() + "%') and `id` > " + idAtual + " order by `id` desc;";
+            Statement stmSqlProximoRegistro = conexao.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);//TYPE_SCROLL_INSENSITIVE= para rolar pro lado ; CONCUR_READ_ONLY= que não pode ser habilitado
+            ResultSet rstSqlProximoRegistro = stmSqlProximoRegistro.executeQuery(strSqlProximoRegistro);
+          
+            if (rstSqlProximoRegistro.next()) {
+                txtId.setText(rstSqlProximoRegistro.getString("id"));
+                txtNome.setText(rstSqlProximoRegistro.getString("nome"));
+                txtEmail.setText(rstSqlProximoRegistro.getString("email"));
+                btnPrimeiro.setEnabled(true);
+                btnAnterior.setEnabled(true);
+                lblNotificacoes.setText("Você chegou ao último registro.");
+            } else {
+                txtId.setText(idAtual);
+                txtNome.setText(nomeAtual);
+                txtEmail.setText(emailAtual);
+                btnPrimeiro.setEnabled(true);
+                btnAnterior.setEnabled(true);
+                lblNotificacoes.setText("Você chegou ao último registro.");
+            }
+            stmSqlProximoRegistro.close();
+        } catch (Exception e) {
+            lblNotificacoes.setText(setHtmlFormat("Não foi possível encontrar o último registro! Por favor, verifique e tente novamente."));
+            System.err.println("Erro: " + e);
+            
+        }
         
     }
 

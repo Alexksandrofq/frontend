@@ -24,7 +24,8 @@ public class TelaDePesquisa extends JFrame
     public static JButton btnPrimeiro;
     public static JButton btnAnterior;
     public static JButton btnProximo;
-    public static JButton btnUltimo;
+
+    public static JButton btnHistorico;
 
     public static JLabel lblNotificacoes;
 
@@ -51,11 +52,14 @@ public class TelaDePesquisa extends JFrame
         /*add sozinho = está adicionando ao construtor */
         add(linha_lblPesquisa);
 
+      
+ 
         JPanel linha_inputPesquisa = new JPanel(new GridLayout(1, 2));
 
 
         txtPesquisa = new JTextField(tamanhoInputs);// Declaração de várivael 
         linha_inputPesquisa.add(txtPesquisa);// Aqui vai adicionar a linha_inputPesquisa
+        
 
         add(linha_inputPesquisa);
 
@@ -128,8 +132,12 @@ public class TelaDePesquisa extends JFrame
                 @Override
                 public void actionPerformed(ActionEvent event) {
                   
-                    if (ntfCampoVazio() == false) {
-                        NavegadorDeRegistro.ultimoRegistro();
+                    if (txtPesquisa.getText().trim().length() <= 0) {
+                        lblNotificacoes.setText(setHtmlFormat("Por favor, digite algo e tente novamente."));
+                        txtPesquisa.requestFocus();
+                        return;
+                    } else {
+                        NavegadorDeRegistro.pesquisar();
                     }
 
                 }// Aqui fecha método actionPerformed
@@ -144,7 +152,7 @@ public class TelaDePesquisa extends JFrame
                 public void actionPerformed(ActionEvent event) {
                   
                     if (ntfCampoVazio() == false) {
-                        NavegadorDeRegistro.ultimoRegistro();
+                        NavegadorDeRegistro.primeiroRegistro();
                     }
 
                 }// Aqui fecha método actionPerformed
@@ -159,7 +167,7 @@ public class TelaDePesquisa extends JFrame
                 public void actionPerformed(ActionEvent event) {
                   
                     if (ntfCampoVazio() == false) {
-                        NavegadorDeRegistro.ultimoRegistro();
+                        NavegadorDeRegistro.registroAnterior();
                     }
 
                 }// Aqui fecha método actionPerformed
@@ -171,16 +179,24 @@ public class TelaDePesquisa extends JFrame
             new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent event) {
-                  
+                    if (ntfCampoVazio() == false) {
+                        NavegadorDeRegistro.proximoRegistro();
+                    }
+                }
+            }
+        );
+        btnUltimo.addActionListener(
+            new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent event) {
                     if (ntfCampoVazio() == false) {
                         NavegadorDeRegistro.ultimoRegistro();
                     }
-
                 }// Aqui fecha método actionPerformed
-
             }// Aqui fecha o objeto ActionListener
-
         );
+        
+                  
 
         txtPesquisa.addKeyListener( //Escutador chave, iremos sobescrever, incluir no método KeyReleased que ja existe denro do objeto KeyAdapter
             new KeyAdapter() {//KeyAdapter = para receber eventos de teclado
@@ -195,9 +211,8 @@ public class TelaDePesquisa extends JFrame
                         
                     }else{
                         btnPesquisar.setEnabled(false);// Se o que o usuário tenta pesquisar não concedir com o if, desabilita o botão de pesquisa e limpa os campos
-                        if (e.getKeyCode() == 10){
-                            limparCampos();
-                        return;
+                        if (e.getKeyCode() == 10) {
+                            limparCampos("Digite algo para continuar.");                       
                         }
                     }// Aqui fecha o else
                    
@@ -216,15 +231,17 @@ public class TelaDePesquisa extends JFrame
     }// Aqui fecha o construtor TelaDePesquisa  
 
 
-    public static void ntfCampoVazio() {
+    public static boolean ntfCampoVazio() {
         if (txtPesquisa.getText().trim().length() <= 0) {// se o úsuario clicar em pesquisar sem ter escrito algo
             lblNotificacoes.setText(setHtmlFormat("Ops! Campo vazio.Por favor, digite algo e tente novamente."));
             txtPesquisa.requestFocus();// RequestFocus serve para conduzir o usuário a focar no campo de texto
-            return;
+            return true;
+        } else {
+            return false;
         }
     }
 
-    public static void limparCampos(){// Aqui define o método para limpa os campos ápos ja ter realizado uma pesquisa
+    public static void limparCampos(String notificacao) {// Aqui define o método para limpa os campos ápos ja ter realizado uma pesquisa
         btnPesquisar.setEnabled(false);
         txtId.setText("");
         txtNome.setText("");
@@ -233,7 +250,9 @@ public class TelaDePesquisa extends JFrame
         btnAnterior.setEnabled(false);
         btnProximo.setEnabled(false);
         btnUltimo.setEnabled(false);
-        lblNotificacoes.setText("Digite algo para pesquisar.");
+        if (notificacao.trim().length() > 0) {
+            lblNotificacoes.setText(setHtmlFormat(notificacao));
+        }
 
     }
 
