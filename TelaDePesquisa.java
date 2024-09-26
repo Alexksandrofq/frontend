@@ -24,6 +24,7 @@ public class TelaDePesquisa extends JFrame
     public static JButton btnPrimeiro;
     public static JButton btnAnterior;
     public static JButton btnProximo;
+    public static JButton btnUltimo;
 
     public static JButton btnHistorico;
 
