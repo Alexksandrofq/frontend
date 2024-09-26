@@ -52,7 +52,7 @@ public class TelaDeCadastro extends JFrame
             new ActionListener() {
                 @Override
                 // Aqui define o método actionPerformed, nele foi definido as mensagens de notificações
-                /**trim = remove os espaços em branco, setHtmlFormat = para deixa em formato html e quabra a mensagem, length = contador de caracteres*/
+                /**trim = remove os espaaço lateral, setHtmlFormat = para deixa em formato html e quabra a mensagem, length = contador de caracteres*/
                 public void actionPerformed(ActionEvent event) {
                     if (txtNome.getText().trim().length() <= 0) {
                         lblNotificacoes.setText(setHtmlFormat("É necessário digitar um Nome para o cadastro. Por favor, digite um nome e tente novamente."));
