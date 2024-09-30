@@ -43,7 +43,7 @@ public class NavegadorDeRegistro extends TelaDeAtualizacao {
                 if (atualizarNome.length() > 0 || atualizarEmail.length() > 0) {
                     atualizarSenha = " and ";
                 }
-                atualizarSenha += "`senha` = '" + txtSenha.getPassword().toString() + "'";
+                atualizarSenha += "`senha` = '" + String.valueOf(txtSenha.getPassword()) + "'";
             }
             if (atualizarNome.length() > 0 || atualizarEmail.length() > 0 || atualizarSenha.length() > 0) {
                 Connection conexao = MySQLConnector.conectar();
@@ -79,7 +79,6 @@ public class NavegadorDeRegistro extends TelaDeAtualizacao {
                 String strSqlAtualizarCampos = "select * from `db_senac`.`tbl_senac` where `id` = " + id + ";";
                 Statement stmSqlAtualizarCampos = conexao.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);//TYPE_SCROLL_INSENSITIVE= para rolar pro lado ; CONCUR_READ_ONLY= que não pode ser habilitado
                 ResultSet rstSqlAtualizarCampos = stmSqlAtualizarCampos.executeQuery(strSqlAtualizarCampos);
-    
                 if (rstSqlAtualizarCampos.next()) {
                     txtNome.setText(rstSqlAtualizarCampos.getString("nome"));
                     nomeAtual = txtNome.getText();
