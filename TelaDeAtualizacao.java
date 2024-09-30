@@ -166,4 +166,4 @@ public class TelaDeAtualizacao extends JFrame
         appTelaDeAtualizacao.setDefaultCloseOperation(EXIT_ON_CLOSE);
     }// Aqui fecha o método executor
 
-}// Aqui fecha a classe TelaDePesqusa
+}// Aqui fecha a classe TelaDeAtualizacao
